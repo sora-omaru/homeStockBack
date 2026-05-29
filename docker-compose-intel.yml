@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: home-stock-db
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_DB: home_stock
+      POSTGRES_USER: home_stock_user
+      POSTGRES_PASSWORD: home_stock_passward
+    volumes:
+      - home_stock_db_data:/var/lib/postgresql/data
+
+volumes:
+  home_stock_db_data:
