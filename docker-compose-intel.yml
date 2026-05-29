@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_DB: home_stock
       POSTGRES_USER: home_stock_user
-      POSTGRES_PASSWORD: home_stock_passward
+      POSTGRES_PASSWORD: home_stock_password
     volumes:
       - home_stock_db_data:/var/lib/postgresql/data
 
