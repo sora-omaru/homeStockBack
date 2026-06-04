@@ -1,6 +1,9 @@
 package com.example.home_stock_api.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,12 +24,19 @@ public class UserEntity {
     @Column(name = "public_id", nullable = false, unique = true)
     private UUID publicId;
 
+    @NotBlank
+    @Email
+    @Size(max = 255)
     @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
+    @NotBlank
+    @Size(max = 255)
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
+    @NotBlank
+    @Size(max = 100)
     @Column(name = "display_name", nullable = false, length = 100)
     private String displayName;
 
@@ -41,4 +51,21 @@ public class UserEntity {
 
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        OffsetDateTime now = OffsetDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    public  void preUpdate(){
+        this.updatedAt = OffsetDateTime.now();
+    }
+
 }
+
+
+
+
