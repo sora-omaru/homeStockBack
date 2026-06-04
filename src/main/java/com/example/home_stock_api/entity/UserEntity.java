@@ -24,19 +24,14 @@ public class UserEntity {
     @Column(name = "public_id", nullable = false, unique = true)
     private UUID publicId;
 
-    @NotBlank
-    @Email
-    @Size(max = 255)
+
     @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
-    @NotBlank
-    @Size(max = 255)
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
-    @NotBlank
-    @Size(max = 100)
+
     @Column(name = "display_name", nullable = false, length = 100)
     private String displayName;
 
