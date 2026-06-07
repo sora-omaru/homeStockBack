@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
         boolean emailExists = userRepository.existsByEmail(request.getEmail());
         if (emailExists) {
-            throw new IllegalArgumentException("すでに登録済みです！");
+            throw new IllegalArgumentException("このメールアドレスはすでに登録済みです！");
         }
         return null;
 
