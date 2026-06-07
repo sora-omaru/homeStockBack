@@ -5,4 +5,6 @@ import com.example.home_stock_api.dto.response.RegisterUserResponseDto;
 
 public interface UserService {
 RegisterUserResponseDto register(RegisterUserRequestDto request);
+
+
 }
