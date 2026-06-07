@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -27,11 +29,20 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("このメールアドレスはすでに登録済みです！");
         }
 
-        String hashedPassword =  passwordEncoder.encode(request.getPassword());
+        String hashedPassword = passwordEncoder.encode(request.getPassword());
+        UUID publicId = UUID.randomUUID();//publicId生成
+
 
         UserEntity user = new UserEntity();
+        user.setEmail(request.getEmail());
+        user.setPublicId(publicId);
+        user.setPasswordHash(hashedPassword);
+        user.setDisplayName(request.getDisplayName());
 
-        return null;
+        UserEntity savedUser = userRepository.save(user);
+        String message = "登録完了！";
+        RegisterUserResponseDto response = new RegisterUserResponseDto(savedUser.getPublicId(), savedUser.getDisplayName(), message);
+        return response;
 
     }
 }
