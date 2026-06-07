@@ -3,6 +3,7 @@ package com.example.home_stock_api.service.impl;
 
 import com.example.home_stock_api.dto.request.RegisterUserRequestDto;
 import com.example.home_stock_api.dto.response.RegisterUserResponseDto;
+import com.example.home_stock_api.entity.UserEntity;
 import com.example.home_stock_api.repository.UserRepository;
 import com.example.home_stock_api.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,11 @@ public class UserServiceImpl implements UserService {
         if (emailExists) {
             throw new IllegalArgumentException("このメールアドレスはすでに登録済みです！");
         }
+
+        String hashedPassword =  passwordEncoder.encode(request.getPassword());
+
+        UserEntity user = new UserEntity();
+
         return null;
 
     }
