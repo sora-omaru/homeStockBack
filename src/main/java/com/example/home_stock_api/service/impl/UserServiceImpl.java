@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity savedUser = userRepository.save(user);
         String message = "登録完了！";
+        //ユーザー登録にあたっての返却値登録
         RegisterUserResponseDto response = new RegisterUserResponseDto(savedUser.getPublicId(), savedUser.getDisplayName(), message);
         return response;
 
