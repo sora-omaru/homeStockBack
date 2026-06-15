@@ -1,6 +1,8 @@
 package com.example.home_stock_api.service.impl;
 
 
+import com.example.home_stock_api.common.error.BusinessException;
+import com.example.home_stock_api.common.error.ErrorCode;
 import com.example.home_stock_api.dto.request.RegisterUserRequestDto;
 import com.example.home_stock_api.dto.response.RegisterUserResponseDto;
 import com.example.home_stock_api.entity.UserEntity;
@@ -19,14 +21,14 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;//pwハッシュ化
 
     @Override
-    public RegisterUserResponseDto register (RegisterUserRequestDto request) {
+    public RegisterUserResponseDto register(RegisterUserRequestDto request) {
         if (!request.getPassword().equals(request.getPasswordConfirm())) {
             throw new IllegalArgumentException("パスワードと確認用のパスワードが一致しません！");
         }
-
+//E-mailが重複していた場合のエラー
         boolean emailExists = userRepository.existsByEmail(request.getEmail());
         if (emailExists) {
-            throw new IllegalArgumentException("このメールアドレスはすでに登録済みです！");
+            throw new BusinessException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
 
         String hashedPassword = passwordEncoder.encode(request.getPassword());
