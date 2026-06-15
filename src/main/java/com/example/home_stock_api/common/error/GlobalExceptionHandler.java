@@ -1,0 +1,25 @@
+package com.example.home_stock_api.common.error;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(
+            BusinessException exception
+    ) {
+        ErrorCode errorCode = exception.getErrorCode();
+        ErrorResponse response = new ErrorResponse(
+                errorCode.getStatus().value(),
+                errorCode.getMessage(),
+                errorCode.name()
+        );
+
+        return ResponseEntity.status(errorCode.getStatus()).body(response);
+    }
+
+    ;
+
+}

@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public RegisterUserResponseDto register(RegisterUserRequestDto request) {
         if (!request.getPassword().equals(request.getPasswordConfirm())) {
-            throw new IllegalArgumentException("パスワードと確認用のパスワードが一致しません！");
+            throw new BusinessException(ErrorCode.PASSWORD_MISMATCH);
         }
 //E-mailが重複していた場合のエラー
         boolean emailExists = userRepository.existsByEmail(request.getEmail());
