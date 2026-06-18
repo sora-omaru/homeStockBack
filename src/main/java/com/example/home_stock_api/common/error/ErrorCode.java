@@ -13,6 +13,10 @@ public enum ErrorCode {
     PASSWORD_MISMATCH(
             HttpStatus.BAD_REQUEST,
             "入力されたパスワードが一致しません"
+    ),
+    VALIDATION_ERROR(
+            HttpStatus.BAD_REQUEST,
+            "入力内容に誤りがあります"
     );
 
     private final HttpStatus status;
