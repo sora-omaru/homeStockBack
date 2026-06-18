@@ -4,7 +4,9 @@ spring:
     username: home_stock_user
     password: home_stock_password
     driver-class-name: org.postgresql.Driver
-
+logging:
+  level:
+    org.springframework.security: DEBUG
   jpa:
     hibernate:
       ddl-auto: validate
