@@ -22,19 +22,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getStatus()).body(response);
     }
 
-@ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(
             MethodArgumentNotValidException exception
-){
-ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
-ErrorResponse response = new ErrorResponse(
-        errorCode.getStatus().value(),
-        errorCode.name(),
-        errorCode.getMessage()
+    ) {
+        ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
+        String field = exception.getBindingResult().getFieldErrors().get(0).getField();
+        String message = exception.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
+        String validationMessage = field + ": " + message;
+        ErrorResponse response = new ErrorResponse(
+                errorCode.getStatus().value(),
+                errorCode.name(),
+                validationMessage
         );
-    return ResponseEntity.status(errorCode.getStatus()).body(response);
-}
-
+        return ResponseEntity.status(errorCode.getStatus()).body(response);
+    }
 
 
 }

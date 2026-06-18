@@ -12,14 +12,15 @@ import lombok.Setter;
 @Setter
 public class RegisterUserRequestDto {
 
-    @NotBlank
+
     @Email
     @Size(max = 255)
+    @NotBlank(message = "メールアドレスは必須です")
     private String email;
 
     @NotBlank
     @Size(min = 8, max = 255)
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).+$")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).+$",message = "パスワードは英字と数字を含めてください")
     private String password;
 
     //確認用のパスワード
