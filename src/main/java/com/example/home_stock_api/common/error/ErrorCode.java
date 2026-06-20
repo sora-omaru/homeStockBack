@@ -17,6 +17,10 @@ public enum ErrorCode {
     VALIDATION_ERROR(
             HttpStatus.BAD_REQUEST,
             "入力内容に誤りがあります"
+    ),
+    LOGIN_FAILED(
+            HttpStatus.UNAUTHORIZED,
+            "メールアドレスまたはパスワードが正しくありません"
     );
 
     private final HttpStatus status;
