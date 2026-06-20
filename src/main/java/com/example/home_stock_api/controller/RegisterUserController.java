@@ -1,7 +1,7 @@
 package com.example.home_stock_api.controller;
 
 import com.example.home_stock_api.dto.request.RegisterUserRequestDto;
-import com.example.home_stock_api.dto.response.RegisterUserResponseDto;
+import com.example.home_stock_api.dto.response.UserAuthResponseDto;
 import com.example.home_stock_api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ public class RegisterUserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterUserResponseDto> register(@Valid @RequestBody RegisterUserRequestDto request){
-        RegisterUserResponseDto response = userService.register(request);
+    public ResponseEntity<UserAuthResponseDto> register(@Valid @RequestBody RegisterUserRequestDto request){
+        UserAuthResponseDto response = userService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

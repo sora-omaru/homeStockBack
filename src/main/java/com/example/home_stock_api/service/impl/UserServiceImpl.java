@@ -4,7 +4,7 @@ package com.example.home_stock_api.service.impl;
 import com.example.home_stock_api.common.error.BusinessException;
 import com.example.home_stock_api.common.error.ErrorCode;
 import com.example.home_stock_api.dto.request.RegisterUserRequestDto;
-import com.example.home_stock_api.dto.response.RegisterUserResponseDto;
+import com.example.home_stock_api.dto.response.UserAuthResponseDto;
 import com.example.home_stock_api.entity.UserEntity;
 import com.example.home_stock_api.repository.UserRepository;
 import com.example.home_stock_api.service.UserService;
@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;//pwハッシュ化
 
     @Override
-    public RegisterUserResponseDto register(RegisterUserRequestDto request) {
+    public UserAuthResponseDto register(RegisterUserRequestDto request) {
         if (!request.getPassword().equals(request.getPasswordConfirm())) {
             throw new BusinessException(ErrorCode.PASSWORD_MISMATCH);
         }
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         UserEntity savedUser = userRepository.save(user);
         String message = "登録完了！";
         //ユーザー登録にあたっての返却値登録
-        RegisterUserResponseDto response = new RegisterUserResponseDto(savedUser.getPublicId(), savedUser.getDisplayName(), message);
+        UserAuthResponseDto response = new UserAuthResponseDto(savedUser.getPublicId(), savedUser.getDisplayName(), message);
         return response;
 
     }
