@@ -31,9 +31,10 @@ public class AuthServiceImpl implements AuthService {
                 request.getPassword(),
                 user.getPasswordHash()
         );
-        if(passwordMatches){
+        if(!passwordMatches){
             throw  new BusinessException(ErrorCode.LOGIN_FAILED);
         }
+
         return new UserAuthResponseDto(user.getPublicId(),user.getDisplayName(),"ログインしました！");
     }
 }
