@@ -34,6 +34,6 @@ public class AuthServiceImpl implements AuthService {
         if(passwordMatches){
             throw  new BusinessException(ErrorCode.LOGIN_FAILED);
         }
-        return null;
+        return new UserAuthResponseDto(user.getPublicId(),user.getDisplayName(),"ログインしました！");
     }
 }
