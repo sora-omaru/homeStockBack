@@ -1,5 +1,6 @@
 package com.example.home_stock_api.controller;
 
+import com.example.home_stock_api.config.properties.JwtProperties;
 import com.example.home_stock_api.dto.request.LoginRequestDto;
 import com.example.home_stock_api.dto.response.LoginResult;
 import com.example.home_stock_api.dto.response.UserAuthResponseDto;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private final JwtProperties jwtProperties;
 
     @PostMapping("/login")
     public ResponseEntity<UserAuthResponseDto> login(
@@ -26,7 +28,10 @@ public class AuthController {
     ) {
         LoginResult result = authService.login(request);
 
-        ResponseCookie cookie = ResponseCookie.from("access_token", result.token())
+
+        //Cookie設定
+        //Cookie名が散らばる可能性があるためJwtPropertiesから参照するようにする
+        ResponseCookie cookie = ResponseCookie.from(jwtProperties.getCookieName(), result.token())
                 .httpOnly(true)//本番時false
                 .secure(false)//本番時"Lax"
                 .path("/")
