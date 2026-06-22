@@ -6,6 +6,7 @@ import com.example.home_stock_api.dto.request.LoginRequestDto;
 import com.example.home_stock_api.dto.response.UserAuthResponseDto;
 import com.example.home_stock_api.entity.UserEntity;
 import com.example.home_stock_api.repository.UserRepository;
+import com.example.home_stock_api.security.jwt.JwtTokenProvider;
 import com.example.home_stock_api.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public UserAuthResponseDto login(LoginRequestDto request) {
@@ -32,10 +34,13 @@ public class AuthServiceImpl implements AuthService {
                 request.getPassword(),
                 user.getPasswordHash()
         );
-        if(!passwordMatches){
-            throw  new BusinessException(ErrorCode.LOGIN_FAILED);
+        if (!passwordMatches) {
+            throw new BusinessException(ErrorCode.LOGIN_FAILED);
         }
+        //JWTトークン発行
+        String token = jwtTokenProvider.generateToken(user.getPublicId().toString());
+        System.out.println("token = " + token);
 
-        return new UserAuthResponseDto(user.getPublicId(),user.getDisplayName(),"ログインしました！");
+        return new UserAuthResponseDto(user.getPublicId(), user.getDisplayName(), "ログインしました！");
     }
 }
