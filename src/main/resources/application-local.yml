@@ -4,10 +4,14 @@ spring:
     username: home_stock_user
     password: home_stock_password
     driver-class-name: org.postgresql.Driver
-logging:
-  level:
-    org.springframework.security: DEBUG
+
   jpa:
     hibernate:
       ddl-auto: validate
     show-sql: true
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+#    JWT_SECRET="your-long-secret-key-your-long-secret-key" ./mvnw spring-boot:run -Dspring-boot.run.profiles=local

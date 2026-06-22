@@ -27,6 +27,7 @@ public class AuthServiceImpl implements AuthService {
         }
         UserEntity user = userOptional.get();
 
+        //パスワードがマッチしていない場合はエラーにする
         boolean passwordMatches = passwordEncoder.matches(
                 request.getPassword(),
                 user.getPasswordHash()
