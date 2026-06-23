@@ -16,22 +16,26 @@ import java.util.Date;
 public class JwtTokenProvider {
     private final JwtProperties jwtProperties;
     private final SecretKey key;
-
+//共通Keyで実行できるようにコンストラクタ
+    public JwtTokenProvider(JwtProperties jwtProperties){
+        this.jwtProperties = jwtProperties;
+        this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
+    }
     //JWT認証発行
     public String generateToken(String publicId) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + jwtProperties.getExpirationMs());
-//
-        SecretKey key = Keys.hmacShaKeyFor(
-                jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8)
-        );
+
+//        SecretKey key = Keys.hmacShaKeyFor(
+//                jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8)
+//        );
 
         return Jwts.builder().subject(publicId).issuedAt(now).expiration(expiration).signWith(key).compact();
     }
 
     //読み取り処理
     //署名検証と解析
-    public boolean validationToken(String token) {
+    public boolean validateToken(String token) {
         try {
 
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
@@ -42,7 +46,7 @@ public class JwtTokenProvider {
     }
 
     //publicIdを抽出(生成時にsubjectに登録)
-    public String getPublicIdFormToken(String token) {
+    public String getPublicIdFromToken(String token) {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
     }
 }
