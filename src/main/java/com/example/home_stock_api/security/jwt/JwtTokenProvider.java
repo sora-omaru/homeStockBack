@@ -15,6 +15,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
     private final JwtProperties jwtProperties;
+    private final SecretKey key;
 
     //JWT認証発行
     public String generateToken(String publicId) {
@@ -26,5 +27,14 @@ public class JwtTokenProvider {
         );
 
         return Jwts.builder().subject(publicId).issuedAt(now).expiration(expiration).signWith(key).compact();
+    }
+
+    //読み取り処理
+    public boolean validationToken(String token){
+        try{
+
+            Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+            return true;
+        }catch (){}
     }
 }
