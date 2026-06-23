@@ -23,6 +23,7 @@ logs/
 .env.*
 !.env.example
 !.env.sample
+application-local.yml
 
 ### OS ###
 .DS_Store
