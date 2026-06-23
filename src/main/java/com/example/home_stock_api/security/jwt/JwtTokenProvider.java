@@ -1,6 +1,7 @@
 package com.example.home_stock_api.security.jwt;
 
 import com.example.home_stock_api.config.properties.JwtProperties;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
 
 @Component
@@ -30,11 +30,19 @@ public class JwtTokenProvider {
     }
 
     //読み取り処理
-    public boolean validationToken(String token){
-        try{
+    //署名検証と解析
+    public boolean validationToken(String token) {
+        try {
 
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
             return true;
-        }catch (){}
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    //publicIdを抽出(生成時にsubjectに登録)
+    public String getPublicIdFormToken(String token) {
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
     }
 }
