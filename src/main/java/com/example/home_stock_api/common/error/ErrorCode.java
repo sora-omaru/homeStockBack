@@ -23,7 +23,7 @@ public enum ErrorCode {
             "メールアドレスまたはパスワードが正しくありません"
     ),
     USER_NOT_FOUND(
-            HttpStatus.UNAUTHORIZED,
+            HttpStatus.NOT_FOUND,
             "ユーザーが見つかりませんでした"
     );
 
