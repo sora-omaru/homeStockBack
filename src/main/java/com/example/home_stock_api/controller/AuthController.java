@@ -3,6 +3,7 @@ package com.example.home_stock_api.controller;
 import com.example.home_stock_api.config.properties.JwtProperties;
 import com.example.home_stock_api.dto.request.LoginRequestDto;
 import com.example.home_stock_api.dto.response.LoginResult;
+import com.example.home_stock_api.dto.response.MeResponseDto;
 import com.example.home_stock_api.dto.response.UserAuthResponseDto;
 import com.example.home_stock_api.service.AuthService;
 import jakarta.validation.Valid;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -20,10 +23,12 @@ public class AuthController {
     private final AuthService authService;
     private final JwtProperties jwtProperties;
 
-    //test用
+    //JWT認証後の判定用
     @GetMapping("/me")
-    public String me(Authentication authentication){
-        return authentication.getName();
+    public MeResponseDto me(Authentication authentication) {
+        UUID publicId = UUID.fromString(authentication.getName());
+
+        return authService.getCurrentUser(publicId);
     }
 
     @PostMapping("/login")
