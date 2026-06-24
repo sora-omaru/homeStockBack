@@ -4,6 +4,7 @@ import com.example.home_stock_api.common.error.BusinessException;
 import com.example.home_stock_api.common.error.ErrorCode;
 import com.example.home_stock_api.dto.request.LoginRequestDto;
 import com.example.home_stock_api.dto.response.LoginResult;
+import com.example.home_stock_api.dto.response.MeResponseDto;
 import com.example.home_stock_api.dto.response.UserAuthResponseDto;
 import com.example.home_stock_api.entity.UserEntity;
 import com.example.home_stock_api.repository.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +45,15 @@ public class AuthServiceImpl implements AuthService {
         System.out.println("token = " + token);
 
         UserAuthResponseDto response = new UserAuthResponseDto(user.getPublicId(), user.getDisplayName(), "ログインしました！");
+
+
         return new LoginResult(response, token);
+    }
+
+    @Override
+    public MeResponseDto getCurrentUser(UUID publicId) {
+        UserEntity user = userRepository.findByPublicId(publicId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        return new MeResponseDto(user.getPublicId(), user.getDisplayName());
     }
 }

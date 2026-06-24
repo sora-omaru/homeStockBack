@@ -21,6 +21,10 @@ public enum ErrorCode {
     LOGIN_FAILED(
             HttpStatus.UNAUTHORIZED,
             "メールアドレスまたはパスワードが正しくありません"
+    ),
+    USER_NOT_FOUND(
+            HttpStatus.UNAUTHORIZED,
+            "ユーザーが見つかりませんでした"
     );
 
     private final HttpStatus status;
@@ -32,4 +36,4 @@ public enum ErrorCode {
         this.status = status;
         this.message = message;
     }
-}
+    }
