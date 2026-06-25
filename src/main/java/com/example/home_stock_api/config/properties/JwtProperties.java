@@ -15,4 +15,8 @@ public class JwtProperties {
     private long expirationMs;
 
     private String cookieName;
+
+    private boolean cookieSecure = true;
+
+    private String cookieSameSite = "Strict";
 }

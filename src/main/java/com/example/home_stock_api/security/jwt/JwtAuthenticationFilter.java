@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -38,13 +37,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        if (token != null) {
-            boolean isValid = jwtTokenProvider.validateToken(token);
-
-            System.out.println("isValid = " + isValid);
-            if (isValid) {
+        if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (jwtTokenProvider.validateToken(token)) {
                 String publicId = jwtTokenProvider.getPublicIdFromToken(token);
-                System.out.println("publicId = " + publicId);
 
                 //publicIdのユーザーとして認証していると情報作成している
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(

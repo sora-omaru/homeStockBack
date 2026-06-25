@@ -42,7 +42,6 @@ public class AuthServiceImpl implements AuthService {
         }
         //JWTトークン発行
         String token = jwtTokenProvider.generateToken(user.getPublicId().toString());
-        System.out.println("token = " + token);
 
         UserAuthResponseDto response = new UserAuthResponseDto(user.getPublicId(), user.getDisplayName(), "ログインしました！");
 

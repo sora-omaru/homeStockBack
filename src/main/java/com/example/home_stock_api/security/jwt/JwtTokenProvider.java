@@ -4,8 +4,8 @@ import com.example.home_stock_api.config.properties.JwtProperties;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +18,12 @@ public class JwtTokenProvider {
 //共通Keyで実行できるようにコンストラクタ
     public JwtTokenProvider(JwtProperties jwtProperties){
         this.jwtProperties = jwtProperties;
+        if (!StringUtils.hasText(jwtProperties.getSecret())) {
+            throw new IllegalArgumentException("jwt.secret must be configured");
+        }
+        if (jwtProperties.getExpirationMs() <= 0) {
+            throw new IllegalArgumentException("jwt.expiration-ms must be greater than 0");
+        }
         this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
     }
     //JWT認証発行
