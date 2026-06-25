@@ -6,6 +6,8 @@ import com.example.home_stock_api.dto.response.LoginResult;
 import com.example.home_stock_api.dto.response.MeResponseDto;
 import com.example.home_stock_api.dto.response.UserAuthResponseDto;
 import com.example.home_stock_api.service.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +33,7 @@ public class AuthController {
         return authService.getCurrentUser(publicId);
     }
 
+    //Cookie登録
     @PostMapping("/login")
     public ResponseEntity<UserAuthResponseDto> login(
             @Valid @RequestBody LoginRequestDto request
@@ -53,9 +56,17 @@ public class AuthController {
                 .body(result.response());
     }
 
+    //Cookie削除
     @PostMapping("/logout")
-    public String logout(){
-       return  "logoutしました！";
+    public ResponseEntity<Void> logout() {
+        ResponseCookie cookie = ResponseCookie.from(jwtProperties.getCookieName(), "").httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Lax")
+                .build();
+
+        return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
     }
 
 }
