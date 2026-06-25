@@ -53,4 +53,9 @@ public class AuthController {
                 .body(result.response());
     }
 
+    @PostMapping("/logout")
+    public String logout(){
+       return  "logoutしました！";
+    }
+
 }
