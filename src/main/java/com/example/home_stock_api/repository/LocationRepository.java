@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface LocationRepository extends JpaRepository<LocationEntity, Long> {
+    //複数帰ってくるためListに返却値を設定している
     List<LocationEntity> findByUser(UserEntity user);
 }
