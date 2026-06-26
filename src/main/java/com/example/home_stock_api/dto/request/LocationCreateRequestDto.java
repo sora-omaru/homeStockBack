@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LocationCreateRequestDto {
+    //PublicIdはJWTから取得する。
     @NotBlank(message = "場所は必須です")
     @Size(max = 100, message = "100文字以内で入力してください")
     private String name;
