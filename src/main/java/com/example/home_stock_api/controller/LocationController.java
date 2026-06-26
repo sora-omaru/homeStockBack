@@ -17,6 +17,7 @@ import java.util.UUID;
 public class LocationController {
     private final LocationService locationService;
 
+    @GetMapping
     public List<LocationResponseDto> locations(Authentication authentication) {
         UUID publicId = UUID.fromString(authentication.getName());
 
