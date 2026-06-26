@@ -2,6 +2,7 @@ package com.example.home_stock_api.service.impl;
 
 import com.example.home_stock_api.common.error.BusinessException;
 import com.example.home_stock_api.common.error.ErrorCode;
+import com.example.home_stock_api.dto.request.LocationCreateRequestDto;
 import com.example.home_stock_api.dto.response.LocationResponseDto;
 import com.example.home_stock_api.entity.LocationEntity;
 import com.example.home_stock_api.entity.UserEntity;
@@ -29,5 +30,16 @@ public class LocationServiceImpl implements LocationService {
         List<LocationEntity> locations = locationRepository.findByUser(user);
 
         return locations.stream().map(location -> new LocationResponseDto(location.getId(), location.getName())).toList();
+    }
+
+    @Override
+    public LocationResponseDto createLocation(UUID publicId, LocationCreateRequestDto request) {
+        UserEntity user = userRepository.findByPublicId(publicId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        LocationEntity location = new LocationEntity();
+        location.setUser(user);
+        location.setName(request.getName());
+
+        LocationEntity savedLocation = locationRepository.save(location);
+        return new LocationResponseDto(savedLocation.getId(), savedLocation.getName());
     }
 }
