@@ -30,4 +30,16 @@ public class LocationEntity {
 
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        OffsetDateTime now = OffsetDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    public  void preUpdate(){
+        this.updatedAt = OffsetDateTime.now();
+    }
 }
