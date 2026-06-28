@@ -25,6 +25,10 @@ public enum ErrorCode {
     USER_NOT_FOUND(
             HttpStatus.NOT_FOUND,
             "ユーザーが見つかりませんでした"
+    ),
+    LOCATION_ALREADY_EXISTS(
+            HttpStatus.CONFLICT,
+            "同じ名前の場所は存在します"
     );
 
     private final HttpStatus status;

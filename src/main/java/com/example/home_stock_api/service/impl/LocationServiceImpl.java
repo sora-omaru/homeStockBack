@@ -28,13 +28,16 @@ public class LocationServiceImpl implements LocationService {
     public List<LocationResponseDto> getLocations(UUID publicId) {
         UserEntity user = userRepository.findByPublicId(publicId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         List<LocationEntity> locations = locationRepository.findByUser(user);
-
         return locations.stream().map(location -> new LocationResponseDto(location.getId(), location.getName())).toList();
     }
 
     @Override
     public LocationResponseDto createLocation(UUID publicId, LocationCreateRequestDto request) {
         UserEntity user = userRepository.findByPublicId(publicId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        if (locationRepository.existsByUserAndName(user, request.getName())) {
+            throw new BusinessException(ErrorCode.LOCATION_ALREADY_EXISTS);
+        }
+
         LocationEntity location = new LocationEntity();
         location.setUser(user);
         location.setName(request.getName());
