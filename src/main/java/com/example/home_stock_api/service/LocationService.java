@@ -13,4 +13,6 @@ public interface LocationService {
     List<LocationResponseDto> getLocations(UUID publicId);
 
     LocationResponseDto createLocation(UUID publicId, @Valid LocationCreateRequestDto request);
+
+    void deleteLocation(UUID publicId, Long locationId);
 }

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -42,5 +43,15 @@ public class LocationServiceImpl implements LocationService {
 
         LocationEntity savedLocation = locationRepository.save(location);
         return new LocationResponseDto(savedLocation.getId(), savedLocation.getName());
+    }
+
+    @Override
+    public void deleteLocation(UUID publicId, Long locationId) {
+        LocationEntity location = locationRepository
+                .findByIdAndUser_PublicId(locationId, publicId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.LOCATION_NOT_FOUND));
+
+
+        locationRepository.delete(location);
     }
 }
