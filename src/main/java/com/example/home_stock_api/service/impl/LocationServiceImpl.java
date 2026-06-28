@@ -11,9 +11,7 @@ import com.example.home_stock_api.repository.UserRepository;
 import com.example.home_stock_api.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.stylesheets.LinkStyle;
 
-import javax.xml.stream.Location;
 import java.util.List;
 import java.util.UUID;
 
