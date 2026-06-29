@@ -22,30 +22,19 @@ public class LocationController {
 
     @GetMapping
     public List<LocationResponseDto> locations(Authentication authentication) {
-
-
         return locationService.getLocations(currentUserProvider.getPublicId(authentication));
-
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)//201
+    @ResponseStatus(HttpStatus.CREATED)
     public LocationResponseDto createLocation(@Valid @RequestBody LocationCreateRequestDto request, Authentication authentication) {
-
-
         return locationService.createLocation(currentUserProvider.getPublicId(authentication), request);
-
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLocation(Authentication authentication, @PathVariable Long id) {
-
-
         locationService.deleteLocation(currentUserProvider.getPublicId(authentication), id);
-
         return ResponseEntity.noContent().build();
     }
-
-
 }
 
