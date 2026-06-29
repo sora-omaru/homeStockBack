@@ -21,27 +21,33 @@ public class LocationController {
 
     @GetMapping
     public List<LocationResponseDto> locations(Authentication authentication) {
-        UUID publicId = UUID.fromString(authentication.getName());
 
-        return locationService.getLocations(publicId);
+
+        return locationService.getLocations(getPublicId(authentication));
 
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)//201
     public LocationResponseDto createLocation(@Valid @RequestBody LocationCreateRequestDto request, Authentication authentication) {
-        UUID publicId = UUID.fromString(authentication.getName());
 
-        return locationService.createLocation(publicId, request);
+
+        return locationService.createLocation(getPublicId(authentication), request);
 
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLocation(Authentication authentication, @PathVariable Long id) {
-        UUID publicId = UUID.fromString(authentication.getName());
 
-        locationService.deleteLocation(publicId, id);
+
+        locationService.deleteLocation(getPublicId(authentication), id);
 
         return ResponseEntity.noContent().build();
     }
+
+    //PublicIdの抽出メソッド
+    private UUID getPublicId(Authentication authentication) {
+        return UUID.fromString(authentication.getName());
+    }
 }
+
