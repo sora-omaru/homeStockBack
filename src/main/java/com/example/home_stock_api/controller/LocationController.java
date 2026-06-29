@@ -2,6 +2,7 @@ package com.example.home_stock_api.controller;
 
 import com.example.home_stock_api.dto.request.LocationCreateRequestDto;
 import com.example.home_stock_api.dto.response.LocationResponseDto;
+import com.example.home_stock_api.security.provider.CurrentUserProvider;
 import com.example.home_stock_api.service.LocationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,19 +12,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/locations")
 public class LocationController {
     private final LocationService locationService;
+    private final CurrentUserProvider currentUserProvider;
 
     @GetMapping
     public List<LocationResponseDto> locations(Authentication authentication) {
 
 
-        return locationService.getLocations(getPublicId(authentication));
+        return locationService.getLocations(currentUserProvider.getPublicId(authentication));
 
     }
 
@@ -32,7 +33,7 @@ public class LocationController {
     public LocationResponseDto createLocation(@Valid @RequestBody LocationCreateRequestDto request, Authentication authentication) {
 
 
-        return locationService.createLocation(getPublicId(authentication), request);
+        return locationService.createLocation(currentUserProvider.getPublicId(authentication), request);
 
     }
 
@@ -40,14 +41,11 @@ public class LocationController {
     public ResponseEntity<Void> deleteLocation(Authentication authentication, @PathVariable Long id) {
 
 
-        locationService.deleteLocation(getPublicId(authentication), id);
+        locationService.deleteLocation(currentUserProvider.getPublicId(authentication), id);
 
         return ResponseEntity.noContent().build();
     }
 
-    //PublicIdの抽出メソッド
-    private UUID getPublicId(Authentication authentication) {
-        return UUID.fromString(authentication.getName());
-    }
+
 }
 
