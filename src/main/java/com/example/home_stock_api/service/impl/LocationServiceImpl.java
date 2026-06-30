@@ -13,7 +13,6 @@ import com.example.home_stock_api.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.xml.stream.Location;
 import java.util.List;
 import java.util.UUID;
 

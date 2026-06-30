@@ -1,6 +1,7 @@
 package com.example.home_stock_api.controller;
 
 import com.example.home_stock_api.dto.request.LocationCreateRequestDto;
+import com.example.home_stock_api.dto.request.UpdateLocationRequestDto;
 import com.example.home_stock_api.dto.response.LocationResponseDto;
 import com.example.home_stock_api.security.provider.CurrentUserProvider;
 import com.example.home_stock_api.service.LocationService;
@@ -35,6 +36,10 @@ public class LocationController {
     public ResponseEntity<Void> deleteLocation(Authentication authentication, @PathVariable Long id) {
         locationService.deleteLocation(currentUserProvider.getPublicId(authentication), id);
         return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/{id}")
+    public LocationResponseDto updateLocation(Authentication authentication, @PathVariable Long id ,@Valid @RequestBody UpdateLocationRequestDto request){
+        return locationService.updateLocation(currentUserProvider.getPublicId(authentication),id,request);
     }
 }
 
