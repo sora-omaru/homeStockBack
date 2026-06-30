@@ -3,6 +3,7 @@ package com.example.home_stock_api.service.impl;
 import com.example.home_stock_api.common.error.BusinessException;
 import com.example.home_stock_api.common.error.ErrorCode;
 import com.example.home_stock_api.dto.request.LocationCreateRequestDto;
+import com.example.home_stock_api.dto.request.UpdateLocationRequestDto;
 import com.example.home_stock_api.dto.response.LocationResponseDto;
 import com.example.home_stock_api.entity.LocationEntity;
 import com.example.home_stock_api.entity.UserEntity;
@@ -46,14 +47,29 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public void deleteLocation(UUID publicId, Long locationId) {
-        LocationEntity location = findLocation(publicId, locationId);
+        UserEntity user = findUser(publicId);
+        LocationEntity location = findLocation(user, locationId);
 
         locationRepository.delete(location);
     }
 
-    private LocationEntity findLocation(UUID publicId, Long locationId) {
+    @Override
+    public LocationResponseDto updateLocation(UUID publicId, Long locationId, UpdateLocationRequestDto request) {
+        UserEntity user = findUser(publicId);
+        LocationEntity location = findLocation(user, locationId);
+
+        if (locationRepository.existsByUserAndNameAndIdNot(user, request.name(), locationId)) {
+            throw new BusinessException(ErrorCode.LOCATION_ALREADY_EXISTS);
+        }
+        location.setName(request.name());
+        LocationEntity savedLocation = locationRepository.save(location);
+
+        return toResponse(savedLocation);
+    }
+
+    private LocationEntity findLocation(UserEntity user, Long locationId) {
         return locationRepository
-                .findByIdAndUser_PublicId(locationId, publicId)
+                .findByIdAndUser(locationId, user)
                 .orElseThrow(() -> new BusinessException(ErrorCode.LOCATION_NOT_FOUND));
     }
 

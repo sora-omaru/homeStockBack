@@ -13,7 +13,7 @@ public interface LocationRepository extends JpaRepository<LocationEntity, Long> 
 
     boolean existsByUserAndName(UserEntity user, String name);
 
-    Optional<LocationEntity> findByIdAndUser_PublicId(Long id, UUID publicId);
+    Optional<LocationEntity> findByIdAndUser(Long id, UserEntity user);
 
     boolean existsByUserAndNameAndIdNot(UserEntity user, String name, Long id);
 }

@@ -1,6 +1,7 @@
 package com.example.home_stock_api.service;
 
 import com.example.home_stock_api.dto.request.LocationCreateRequestDto;
+import com.example.home_stock_api.dto.request.UpdateLocationRequestDto;
 import com.example.home_stock_api.dto.response.LocationResponseDto;
 import jakarta.validation.Valid;
 
@@ -13,4 +14,6 @@ public interface LocationService {
     LocationResponseDto createLocation(UUID publicId, @Valid LocationCreateRequestDto request);
 
     void deleteLocation(UUID publicId, Long locationId);
+
+    LocationResponseDto updateLocation(UUID publicId, Long locationId, UpdateLocationRequestDto requestDto);
 }
