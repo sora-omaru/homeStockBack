@@ -43,7 +43,7 @@ public class ItemEntity {
     @Min(0)
     @Column(name = "min_quantity",nullable = false)
     @NotNull
-    private Integer minQuantity;
+    private Integer minQuantity=0;
 
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
