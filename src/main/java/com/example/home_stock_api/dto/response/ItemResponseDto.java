@@ -1,5 +1,6 @@
 package com.example.home_stock_api.dto.response;
 
+import com.example.home_stock_api.entity.ItemCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +13,7 @@ public class ItemResponseDto {
     private String name;
     private Integer quantity;
     private Integer minQuantity;
-    private String category;
+    private ItemCategory category;
     private Long locationId;
     private String locationName;
     private LocalDate expirationDate;

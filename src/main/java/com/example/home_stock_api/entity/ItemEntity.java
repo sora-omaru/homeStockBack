@@ -32,9 +32,10 @@ public class ItemEntity {
     @Min(0)
     private Integer quantity;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false,length = 20)
     @NotNull
-    private String category;
+    private ItemCategory category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
