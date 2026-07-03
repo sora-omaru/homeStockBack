@@ -24,11 +24,11 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    public List<ItemResponseDto> getItems(UUID publicId){
+    public List<ItemResponseDto> getItems(UUID publicId) {
         UserEntity user = findUser(publicId);
 
 
-        return itemRepository.findByUser(user).stream().map(this::toResponse).toList();
+        return itemRepository.findByUserWithLocation(user).stream().map(this::toResponse).toList();
 
     }
 
