@@ -62,6 +62,12 @@ public class ItemServiceImpl implements ItemService {
         return toResponse(savedItem);
     }
 
+    @Override
+    public void deleteItem(UUID publicId, Long id){
+        UserEntity user = findUser(publicId);
+
+    }
+
     // ItemEntityをItemResponseDtoへ変換する
     private ItemResponseDto toResponse(ItemEntity item) {
         LocationEntity location = item.getLocation();

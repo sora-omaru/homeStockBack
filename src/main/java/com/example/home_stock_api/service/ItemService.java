@@ -10,4 +10,6 @@ public interface ItemService {
     List<ItemResponseDto> getItems(UUID publicId);
 
    ItemResponseDto createItem(UUID publicId, ItemCreateRequestDto request);
+
+   void deleteItem(UUID publicId, Long itemId);
 }

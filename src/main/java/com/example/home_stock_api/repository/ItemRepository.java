@@ -23,4 +23,7 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
 
     boolean existsByUserAndName(UserEntity user, String name);
 
+    Optional<ItemEntity> findByUserAndId(UserEntity user,Long id);
+
+
 }
