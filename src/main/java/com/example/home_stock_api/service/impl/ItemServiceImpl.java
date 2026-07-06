@@ -22,7 +22,7 @@ import java.util.UUID;
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
-
+    private final LocationRepository locationRepository;
 
     @Override
     public List<ItemResponseDto> getItems(UUID publicId) {
@@ -34,8 +34,32 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemResponseDto createItem(UUID publicId, ItemCreateRequestDto response) {
-        return null;
+    public ItemResponseDto createItem(UUID publicId, ItemCreateRequestDto request) {
+        UserEntity user = findUser(publicId);
+
+        if (itemRepository.existsByUserAndName(user, request.name())) {
+            throw new BusinessException(ErrorCode.ITEM_ALREADY_EXISTS);
+        }
+        Long locationId = request.locationId();
+        LocationEntity location = null;
+        if (locationId != null) {
+            location = findLocation(user, locationId);
+        }
+
+        ItemEntity item = new ItemEntity();
+        item.setUser(user);
+        item.setLocation(location);
+        item.setName(request.name());
+        item.setQuantity(request.quantity());
+        item.setMinQuantity(request.minQuantity());
+        item.setCategory(request.category());
+        item.setMemo(request.memo());
+        item.setExpirationDate(request.expirationDate());
+
+        ItemEntity savedItem = itemRepository.save(item);
+
+
+        return toResponse(savedItem);
     }
 
     // ItemEntityをItemResponseDtoへ変換する
@@ -53,6 +77,10 @@ public class ItemServiceImpl implements ItemService {
                 item.getExpirationDate(),
                 item.getMemo()
         );
+    }
+
+    private LocationEntity findLocation(UserEntity user, Long locationId) {
+        return locationRepository.findByIdAndUser(locationId, user).orElseThrow(() -> new BusinessException(ErrorCode.LOCATION_NOT_FOUND));
     }
 
     private UserEntity findUser(UUID publicId) {

@@ -9,5 +9,5 @@ import java.util.UUID;
 public interface ItemService {
     List<ItemResponseDto> getItems(UUID publicId);
 
-   ItemResponseDto createItem(UUID publicId, ItemCreateRequestDto requestDto);
+   ItemResponseDto createItem(UUID publicId, ItemCreateRequestDto request);
 }

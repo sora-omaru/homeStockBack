@@ -33,6 +33,10 @@ public enum ErrorCode {
     LOCATION_NOT_FOUND(
             HttpStatus.NOT_FOUND,
             "入力された場所は見当たりません"
+    ),
+    ITEM_ALREADY_EXISTS(
+            HttpStatus.CONFLICT,
+            "同じ名前の物は存在します"
     );
 
     private final HttpStatus status;
@@ -44,4 +48,4 @@ public enum ErrorCode {
         this.status = status;
         this.message = message;
     }
-    }
+}
