@@ -2,6 +2,7 @@ package com.example.home_stock_api.service.impl;
 
 import com.example.home_stock_api.common.error.BusinessException;
 import com.example.home_stock_api.common.error.ErrorCode;
+import com.example.home_stock_api.dto.request.ItemCreateRequestDto;
 import com.example.home_stock_api.dto.response.ItemResponseDto;
 import com.example.home_stock_api.entity.ItemEntity;
 import com.example.home_stock_api.entity.LocationEntity;
@@ -30,6 +31,11 @@ public class ItemServiceImpl implements ItemService {
 
         return itemRepository.findByUserWithLocation(user).stream().map(this::toResponse).toList();
 
+    }
+
+    @Override
+    public ItemResponseDto createItem(UUID publicId, ItemCreateRequestDto response) {
+        return null;
     }
 
     // ItemEntityをItemResponseDtoへ変換する
