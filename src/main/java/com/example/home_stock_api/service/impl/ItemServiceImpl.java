@@ -85,7 +85,7 @@ public class ItemServiceImpl implements ItemService {
                 throw new BusinessException(ErrorCode.ITEM_ALREADY_EXISTS);
             }
         }
-
+//locationIdがNullの場合はそのままにする
         Long locationId = request.locationId();
         LocationEntity location = null;
         if (locationId != null) {
@@ -110,17 +110,7 @@ public class ItemServiceImpl implements ItemService {
     private ItemResponseDto toResponse(ItemEntity item) {
         LocationEntity location = item.getLocation();
 
-        return new ItemResponseDto(
-                item.getId(),
-                item.getName(),
-                item.getQuantity(),
-                item.getMinQuantity(),
-                item.getCategory(),
-                location != null ? location.getId() : null,
-                location != null ? location.getName() : null,
-                item.getExpirationDate(),
-                item.getMemo()
-        );
+        return new ItemResponseDto(item.getId(), item.getName(), item.getQuantity(), item.getMinQuantity(), item.getCategory(), location != null ? location.getId() : null, location != null ? location.getName() : null, item.getExpirationDate(), item.getMemo());
     }
 
     private LocationEntity findLocation(UserEntity user, Long locationId) {
@@ -128,14 +118,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private ItemEntity findItem(UserEntity user, Long itemId) {
-        return itemRepository
-                .findByIdAndUser(itemId, user)
-                .orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
+        return itemRepository.findByIdAndUser(itemId, user).orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
     }
 
     private UserEntity findUser(UUID publicId) {
-        return userRepository.findByPublicId(publicId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        return userRepository.findByPublicId(publicId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
 }
