@@ -3,6 +3,7 @@ package com.example.home_stock_api.service.impl;
 import com.example.home_stock_api.common.error.BusinessException;
 import com.example.home_stock_api.common.error.ErrorCode;
 import com.example.home_stock_api.dto.request.ItemCreateRequestDto;
+import com.example.home_stock_api.dto.request.UpdateItemRequestDto;
 import com.example.home_stock_api.dto.response.ItemResponseDto;
 import com.example.home_stock_api.entity.ItemEntity;
 import com.example.home_stock_api.entity.LocationEntity;
@@ -68,6 +69,12 @@ public class ItemServiceImpl implements ItemService {
         ItemEntity item = findItem(user, itemId);
 
         itemRepository.delete(item);
+    }
+
+    @Override
+    public ItemResponseDto updateItem(UUID publicId, UpdateItemRequestDto request , Long id){
+        return null;
+
     }
 
     // ItemEntityをItemResponseDtoへ変換する
