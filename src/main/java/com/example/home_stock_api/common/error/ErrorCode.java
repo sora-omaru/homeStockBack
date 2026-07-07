@@ -37,6 +37,10 @@ public enum ErrorCode {
     ITEM_ALREADY_EXISTS(
             HttpStatus.CONFLICT,
             "同じ名前の物は存在します"
+    ),
+    ITEM_NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "この物は見つかりませんでした"
     );
 
     private final HttpStatus status;
@@ -48,4 +52,4 @@ public enum ErrorCode {
         this.status = status;
         this.message = message;
     }
-}
+    }

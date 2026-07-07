@@ -63,9 +63,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void deleteItem(UUID publicId, Long id){
+    public void deleteItem(UUID publicId, Long itemId) {
         UserEntity user = findUser(publicId);
-
+        ItemEntity item = itemRepository.findByUserAndId(user, itemId).orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
+        itemRepository.delete(item);
     }
 
     // ItemEntityをItemResponseDtoへ変換する
