@@ -65,7 +65,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void deleteItem(UUID publicId, Long itemId) {
         UserEntity user = findUser(publicId);
-        ItemEntity item = itemRepository.findByUserAndId(user, itemId).orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
+        ItemEntity item = findItem(user, itemId);
+
         itemRepository.delete(item);
     }
 
@@ -88,6 +89,12 @@ public class ItemServiceImpl implements ItemService {
 
     private LocationEntity findLocation(UserEntity user, Long locationId) {
         return locationRepository.findByIdAndUser(locationId, user).orElseThrow(() -> new BusinessException(ErrorCode.LOCATION_NOT_FOUND));
+    }
+
+    private ItemEntity findItem(UserEntity user, Long itemId) {
+        return itemRepository
+                .findByIdAndUser(itemId, user)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
     }
 
     private UserEntity findUser(UUID publicId) {
