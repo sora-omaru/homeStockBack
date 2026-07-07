@@ -41,6 +41,8 @@ public class ItemServiceImpl implements ItemService {
         if (itemRepository.existsByUserAndName(user, request.name())) {
             throw new BusinessException(ErrorCode.ITEM_ALREADY_EXISTS);
         }
+
+        //LocationIdがNullの場合はそのままにする
         Long locationId = request.locationId();
         LocationEntity location = null;
         if (locationId != null) {
@@ -72,8 +74,35 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemResponseDto updateItem(UUID publicId, UpdateItemRequestDto request , Long id){
-        return null;
+    public ItemResponseDto updateItem(UUID publicId, Long id, UpdateItemRequestDto request) {
+        UserEntity user = findUser(publicId);
+        ItemEntity item = findItem(user, id);
+
+
+        //nameが更新された場合、既存のItemたちと重複チェックをする
+        if (!item.getName().equals(request.name())) {
+            if (itemRepository.existsByUserAndName(user, request.name())) {
+                throw new BusinessException(ErrorCode.ITEM_ALREADY_EXISTS);
+            }
+        }
+
+        Long locationId = request.locationId();
+        LocationEntity location = null;
+        if (locationId != null) {
+            location = findLocation(user, locationId);
+        }
+
+        item.setName(request.name());
+        item.setQuantity(request.quantity());
+        item.setMinQuantity(request.minQuantity());
+        item.setCategory(request.category());
+        item.setLocation(location);
+        item.setMemo(request.memo());
+        item.setExpirationDate(request.expirationDate());
+
+        ItemEntity savedItem = itemRepository.save(item);
+
+        return toResponse(savedItem);
 
     }
 

@@ -14,5 +14,5 @@ public interface ItemService {
 
     void deleteItem(UUID publicId, Long itemId);
 
-    ItemResponseDto updateItem(UUID publicId, UpdateItemRequestDto request, Long id);
+    ItemResponseDto updateItem(UUID publicId, Long id, UpdateItemRequestDto request);
 }
