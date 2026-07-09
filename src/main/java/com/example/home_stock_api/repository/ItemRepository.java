@@ -21,6 +21,15 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
             """)
     List<ItemEntity> findByUserWithLocation(@Param("user") UserEntity user);
 
+    @Query("""
+            SELECT i
+            FROM ItemEntity i
+            LEFT JOIN FETCH i.location
+            WHERE i.user = :user
+            AND i.id = :id
+            """)
+    Optional<ItemEntity> findByIdAndUserWithLocation(@Param("id") Long id, @Param("user") UserEntity user);
+
     boolean existsByUserAndName(UserEntity user, String name);
 
     Optional<ItemEntity> findByIdAndUser(Long id, UserEntity user);
