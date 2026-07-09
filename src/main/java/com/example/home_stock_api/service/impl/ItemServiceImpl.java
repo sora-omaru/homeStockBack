@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -37,9 +38,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemResponseDto findItem(UUID publicId, Long itemId) {
         UserEntity user = findUser(publicId);
-        itemRepository.findByIdAndUserWithLocation(itemId, user);
-
-        return null;
+        ItemEntity item = itemRepository.findByIdAndUserWithLocation(itemId, user).orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
+        return toResponse(item);
     }
 
     @Override
