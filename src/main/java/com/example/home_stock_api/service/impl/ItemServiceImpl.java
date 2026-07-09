@@ -35,6 +35,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public ItemResponseDto findItem(UUID publicId, Long itemId){
+        return null;
+    }
+
+    @Override
     public ItemResponseDto createItem(UUID publicId, ItemCreateRequestDto request) {
         UserEntity user = findUser(publicId);
 
