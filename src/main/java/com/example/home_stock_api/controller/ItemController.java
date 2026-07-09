@@ -25,6 +25,11 @@ public class ItemController {
         return itemService.getItems(currentUserProvider.getPublicId(authentication));
     }
 
+    @GetMapping("/{id}")
+    public ItemResponseDto findItem(Authentication authentication,@PathVariable("id") Long itemId){
+        return itemService.findItem(currentUserProvider.getPublicId(authentication),itemId);
+    }
+
     @PostMapping
     public ItemResponseDto createItem(Authentication authentication, @Valid @RequestBody ItemCreateRequestDto request) {
         return itemService.createItem(currentUserProvider.getPublicId(authentication), request);
