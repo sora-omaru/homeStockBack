@@ -4,4 +4,4 @@ jwt:
   cookie-name: access_token
   cookie-secure: false
   cookie-same-site: Strict
-#  JWT_SECRET="your-long-secret-key" ./mvnw spring-boot:run
+

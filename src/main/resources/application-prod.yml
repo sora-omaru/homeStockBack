@@ -1,2 +1,18 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+server:
+  port: ${PORT:8080}
+
 jwt:
-  cookie-secure: true
+  secret: ${JWT_SECRET}
+  expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+  cookie-name: ${JWT_COOKIE_NAME:access_token}
+  cookie-secure: ${COOKIE_SECURE:true}
+  cookie-same-site: ${COOKIE_SAME_SITE:Lax}
+
+app:
+  frontend-origin: ${FRONTEND_ORIGIN}
