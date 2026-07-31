@@ -4,9 +4,11 @@ package com.example.home_stock_api.service.impl;
 import com.example.home_stock_api.common.error.BusinessException;
 import com.example.home_stock_api.common.error.ErrorCode;
 import com.example.home_stock_api.dto.request.RegisterUserRequestDto;
+import com.example.home_stock_api.dto.response.AuthResult;
 import com.example.home_stock_api.dto.response.UserAuthResponseDto;
 import com.example.home_stock_api.entity.UserEntity;
 import com.example.home_stock_api.repository.UserRepository;
+import com.example.home_stock_api.security.jwt.JwtTokenProvider;
 import com.example.home_stock_api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,9 +21,9 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;//pwハッシュ化
-
+    private final JwtTokenProvider jwtTokenProvider;//PublicIdからToken発行
     @Override
-    public UserAuthResponseDto register(RegisterUserRequestDto request) {
+    public AuthResult register(RegisterUserRequestDto request) {
         if (!request.getPassword().equals(request.getPasswordConfirm())) {
             throw new BusinessException(ErrorCode.PASSWORD_MISMATCH);
         }
@@ -42,10 +44,12 @@ public class UserServiceImpl implements UserService {
         user.setDisplayName(request.getDisplayName());
 
         UserEntity savedUser = userRepository.save(user);
+
+        String token = jwtTokenProvider.generateToken(savedUser.getPublicId().toString());
         String message = "登録完了！";
         //ユーザー登録にあたっての返却値登録
         UserAuthResponseDto response = new UserAuthResponseDto(savedUser.getPublicId(), savedUser.getDisplayName(), message);
-        return response;
+        return new AuthResult(response,token);
 
     }
 }

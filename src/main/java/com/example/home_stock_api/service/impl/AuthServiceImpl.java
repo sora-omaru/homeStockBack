@@ -3,7 +3,7 @@ package com.example.home_stock_api.service.impl;
 import com.example.home_stock_api.common.error.BusinessException;
 import com.example.home_stock_api.common.error.ErrorCode;
 import com.example.home_stock_api.dto.request.LoginRequestDto;
-import com.example.home_stock_api.dto.response.LoginResult;
+import com.example.home_stock_api.dto.response.AuthResult;
 import com.example.home_stock_api.dto.response.MeResponseDto;
 import com.example.home_stock_api.dto.response.UserAuthResponseDto;
 import com.example.home_stock_api.entity.UserEntity;
@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public LoginResult login(LoginRequestDto request) {
+    public AuthResult login(LoginRequestDto request) {
         Optional<UserEntity> userOptional = userRepository.findByEmail(request.getEmail());
         if (userOptional.isEmpty()) {
             throw new BusinessException(ErrorCode.LOGIN_FAILED);
@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
         UserAuthResponseDto response = new UserAuthResponseDto(user.getPublicId(), user.getDisplayName(), "ログインしました！");
 
 
-        return new LoginResult(response, token);
+        return new AuthResult(response, token);
     }
 
     @Override
