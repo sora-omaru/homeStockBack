@@ -84,7 +84,7 @@ public class SecurityConfig {
         );
 
         configuration.setAllowedHeaders(
-                List.of("Content-Type")
+                List.of("*")
         );
 
         configuration.setAllowCredentials(true);

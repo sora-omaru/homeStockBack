@@ -1,7 +1,13 @@
 jwt:
-  secret: ${JWT_SECRET}
+  # Local development fallback only. Production overrides this in application-prod.yml.
+  secret: local-development-only-jwt-secret-key-32-bytes-minimum
   expiration-ms: 86400000
   cookie-name: access_token
   cookie-secure: false
   cookie-same-site: Strict
 
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:15432/home_stock}
+    username: ${SPRING_DATASOURCE_USERNAME:home_stock_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:home_stock_password}
