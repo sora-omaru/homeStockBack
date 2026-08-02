@@ -1,12 +1,14 @@
 package com.example.home_stock_api.controller;
 
 import com.example.home_stock_api.dto.request.ItemCreateRequestDto;
+import com.example.home_stock_api.dto.request.UpdateItemQuantityRequestDto;
 import com.example.home_stock_api.dto.request.UpdateItemRequestDto;
 import com.example.home_stock_api.dto.response.ItemResponseDto;
 import com.example.home_stock_api.security.provider.CurrentUserProvider;
 import com.example.home_stock_api.service.ItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +28,8 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ItemResponseDto findItem(Authentication authentication,@PathVariable("id") Long itemId){
-        return itemService.findItem(currentUserProvider.getPublicId(authentication),itemId);
+    public ItemResponseDto findItem(Authentication authentication, @PathVariable("id") Long itemId) {
+        return itemService.findItem(currentUserProvider.getPublicId(authentication), itemId);
     }
 
     @PostMapping
@@ -42,7 +44,21 @@ public class ItemController {
     }
 
     @PutMapping("{id}")
-    public  ItemResponseDto updateItem(Authentication authentication, @PathVariable("id")Long itemId, @Valid @RequestBody UpdateItemRequestDto request){
-        return itemService.updateItem(currentUserProvider.getPublicId(authentication),itemId,request);
+    public ItemResponseDto updateItem(Authentication authentication, @PathVariable("id") Long itemId, @Valid @RequestBody UpdateItemRequestDto request) {
+        return itemService.updateItem(currentUserProvider.getPublicId(authentication), itemId, request);
+    }
+
+    @PatchMapping("{id}/quantity")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateQuantity(
+            Authentication authentication,
+            @PathVariable("id") Long itemId,
+            @Valid @RequestBody UpdateItemQuantityRequestDto request
+    ) {
+        itemService.updateQuantity(
+                currentUserProvider.getPublicId(authentication),
+                itemId,
+                request
+        );
     }
 }

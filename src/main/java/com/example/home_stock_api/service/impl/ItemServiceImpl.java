@@ -3,6 +3,7 @@ package com.example.home_stock_api.service.impl;
 import com.example.home_stock_api.common.error.BusinessException;
 import com.example.home_stock_api.common.error.ErrorCode;
 import com.example.home_stock_api.dto.request.ItemCreateRequestDto;
+import com.example.home_stock_api.dto.request.UpdateItemQuantityRequestDto;
 import com.example.home_stock_api.dto.request.UpdateItemRequestDto;
 import com.example.home_stock_api.dto.response.ItemResponseDto;
 import com.example.home_stock_api.entity.ItemEntity;
@@ -12,6 +13,7 @@ import com.example.home_stock_api.repository.ItemRepository;
 import com.example.home_stock_api.repository.LocationRepository;
 import com.example.home_stock_api.repository.UserRepository;
 import com.example.home_stock_api.service.ItemService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -112,6 +114,18 @@ public class ItemServiceImpl implements ItemService {
 
         return toResponse(savedItem);
 
+    }
+
+    @Override
+    @Transactional
+    public void updateQuantity(
+            UUID publicId,
+            Long itemId,
+            UpdateItemQuantityRequestDto request
+    ) {
+        ItemEntity item = itemRepository.findByIdAndUser_publicId(itemId, publicId).orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
+
+        item.setQuantity(request.quantity());
     }
 
     // ItemEntityをItemResponseDtoへ変換する
