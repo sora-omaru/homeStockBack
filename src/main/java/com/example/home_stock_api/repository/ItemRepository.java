@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
     List<ItemEntity> findByUser(UserEntity user);
@@ -34,5 +35,5 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
 
     Optional<ItemEntity> findByIdAndUser(Long id, UserEntity user);
 
-
+   Optional<ItemEntity> findByIdAndUser_publicId(Long itemId, UUID publicId);
 }
