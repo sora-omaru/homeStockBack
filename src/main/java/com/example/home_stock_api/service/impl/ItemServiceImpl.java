@@ -6,6 +6,7 @@ import com.example.home_stock_api.dto.request.ItemCreateRequestDto;
 import com.example.home_stock_api.dto.request.UpdateItemQuantityRequestDto;
 import com.example.home_stock_api.dto.request.UpdateItemRequestDto;
 import com.example.home_stock_api.dto.response.ItemResponseDto;
+import com.example.home_stock_api.entity.ItemCategory;
 import com.example.home_stock_api.entity.ItemEntity;
 import com.example.home_stock_api.entity.LocationEntity;
 import com.example.home_stock_api.entity.UserEntity;
@@ -17,9 +18,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -128,6 +128,36 @@ public class ItemServiceImpl implements ItemService {
         item.setQuantity(request.quantity());
     }
 
+
+    @Override
+    public Map<ItemCategory, Integer> getCategorySummary(UUID publicId) {
+        UserEntity user = findUser(publicId);
+        List<ItemEntity> items = itemRepository.findByUserWithLocation(user);
+
+        return items.stream()
+                .collect(Collectors.groupingBy(
+                        ItemEntity::getCategory,
+                        Collectors.summingInt(item -> 1)
+                ));
+
+//        Map<ItemCategory, Integer> map = new HashMap<>();
+
+//        for (ItemEntity item : items) {
+//            ItemCategory category = item.getCategory();
+//
+//            Integer count = map.get(category);
+//
+//            if (count == null) {
+//                map.put(category, 1);
+//
+//            } else {
+//                map.put(category, count + 1);
+//            }
+//        }
+        //        System.out.println(map);
+//        return map;
+    }
+
     // ItemEntityをItemResponseDtoへ変換する
     private ItemResponseDto toResponse(ItemEntity item) {
         LocationEntity location = item.getLocation();
@@ -146,5 +176,4 @@ public class ItemServiceImpl implements ItemService {
     private UserEntity findUser(UUID publicId) {
         return userRepository.findByPublicId(publicId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
-
 }

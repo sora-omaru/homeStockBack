@@ -4,6 +4,7 @@ import com.example.home_stock_api.dto.request.ItemCreateRequestDto;
 import com.example.home_stock_api.dto.request.UpdateItemQuantityRequestDto;
 import com.example.home_stock_api.dto.request.UpdateItemRequestDto;
 import com.example.home_stock_api.dto.response.ItemResponseDto;
+import com.example.home_stock_api.entity.ItemCategory;
 import com.example.home_stock_api.security.provider.CurrentUserProvider;
 import com.example.home_stock_api.service.ItemService;
 import jakarta.validation.Valid;
@@ -14,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -60,5 +62,11 @@ public class ItemController {
                 itemId,
                 request
         );
+    }
+
+    @GetMapping("/summary")
+    public Map<ItemCategory, Integer> getCategorySummary(Authentication authentication) {
+
+        return itemService.getCategorySummary(currentUserProvider.getPublicId(authentication));
     }
 }
