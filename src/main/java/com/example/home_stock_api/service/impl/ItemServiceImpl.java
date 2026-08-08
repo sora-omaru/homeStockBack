@@ -13,11 +13,13 @@ import com.example.home_stock_api.entity.UserEntity;
 import com.example.home_stock_api.repository.ItemRepository;
 import com.example.home_stock_api.repository.LocationRepository;
 import com.example.home_stock_api.repository.UserRepository;
+import com.example.home_stock_api.service.ItemNameNormalizer;
 import com.example.home_stock_api.service.ItemService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.Normalizer;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final LocationRepository locationRepository;
+    private final ItemNameNormalizer itemNameNormalizer;
 
     @Override
     public List<ItemResponseDto> getItems(UUID publicId) {
@@ -63,6 +66,7 @@ public class ItemServiceImpl implements ItemService {
         item.setUser(user);
         item.setLocation(location);
         item.setName(request.name());
+        item.setNormalizedName(itemNameNormalizer.normalize(request.name()));
         item.setQuantity(request.quantity());
         item.setMinQuantity(request.minQuantity());
         item.setCategory(request.category());
@@ -176,4 +180,24 @@ public class ItemServiceImpl implements ItemService {
     private UserEntity findUser(UUID publicId) {
         return userRepository.findByPublicId(publicId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
+
+//    //名前を文字列を変換する
+//    private String normalizeName(String name) {
+//        String normalized = Normalizer.normalize(
+//                name,
+//                Normalizer.Form.NFKC
+//        ).toLowerCase();
+//
+//        StringBuilder result = new StringBuilder();
+//
+//        for (char c : normalized.toCharArray()) {
+//            if (c >= 'ァ' && c <= 'ヶ') {
+//                c = (char) (c - 'ァ' + 'ぁ');
+//            }
+//
+//            result.append(c);
+//        }
+//
+//        return result.toString();
+//    }
 }
