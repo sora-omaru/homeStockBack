@@ -107,6 +107,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         item.setName(request.name());
+        item.setNormalizedName(itemNameNormalizer.normalize(request.name()));
         item.setQuantity(request.quantity());
         item.setMinQuantity(request.minQuantity());
         item.setCategory(request.category());

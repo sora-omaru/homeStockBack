@@ -1,14 +1,18 @@
 package com.example.home_stock_api.service;
 
 import java.text.Normalizer;
+import java.util.Locale;
+
+import org.springframework.stereotype.Component;
 
 //受け取ったitemのnameを正規化する
+@Component
 public class ItemNameNormalizer {
     public String normalize(String name) {
         String normalized = Normalizer.normalize(
                 name,
                 Normalizer.Form.NFKC
-        ).toLowerCase();
+        ).toLowerCase(Locale.ROOT);
 
         StringBuilder result = new StringBuilder();
 
