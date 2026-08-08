@@ -21,11 +21,14 @@ public class ItemEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id",nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @Column(nullable = false,length = 100)
-    private  String name;
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    @Column(name = "normalized_name")
+    private String normalizedName;
 
     @Column(nullable = false)
     @NotNull
@@ -33,7 +36,7 @@ public class ItemEntity {
     private Integer quantity;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false,length = 20)
+    @Column(nullable = false, length = 20)
     @NotNull
     private ItemCategory category;
 
@@ -42,9 +45,9 @@ public class ItemEntity {
     private LocationEntity location;
 
     @Min(0)
-    @Column(name = "min_quantity",nullable = false)
+    @Column(name = "min_quantity", nullable = false)
     @NotNull
-    private Integer minQuantity=0;
+    private Integer minQuantity = 0;
 
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
@@ -66,7 +69,7 @@ public class ItemEntity {
     }
 
     @PreUpdate
-    public  void preUpdate(){
+    public void preUpdate() {
         this.updatedAt = OffsetDateTime.now();
     }
 
