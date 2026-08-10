@@ -25,8 +25,8 @@ public class ItemController {
     private final CurrentUserProvider currentUserProvider;
 
     @GetMapping
-    public List<ItemResponseDto> getItems(Authentication authentication) {
-        return itemService.getItems(currentUserProvider.getPublicId(authentication));
+    public List<ItemResponseDto> getItems(Authentication authentication,@RequestParam(required = false) String keyword) {
+        return itemService.getItems(currentUserProvider.getPublicId(authentication),keyword);
     }
 
     @GetMapping("/{id}")

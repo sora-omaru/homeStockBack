@@ -32,11 +32,17 @@ public class ItemServiceImpl implements ItemService {
     private final ItemNameNormalizer itemNameNormalizer;
 
     @Override
-    public List<ItemResponseDto> getItems(UUID publicId) {
+    public List<ItemResponseDto> getItems(UUID publicId, String keyword) {
         UserEntity user = findUser(publicId);
 
+        //すべてを返す
+        if (keyword == null || keyword.isBlank()) {
+            return itemRepository.findByUserWithLocation(user).stream().map(this::toResponse).toList();
+        }
+        //検索用のItemを返す
+        String normalizedKeyword = itemNameNormalizer.normalize(keyword);
 
-        return itemRepository.findByUserWithLocation(user).stream().map(this::toResponse).toList();
+        return itemRepository.findByUser_PublicIdAndNormalizedNameContaining(publicId, normalizedKeyword).stream().map(this::toResponse).toList();
 
     }
 
@@ -162,6 +168,7 @@ public class ItemServiceImpl implements ItemService {
         //        System.out.println(map);
 //        return map;
     }
+
 
     // ItemEntityをItemResponseDtoへ変換する
     private ItemResponseDto toResponse(ItemEntity item) {

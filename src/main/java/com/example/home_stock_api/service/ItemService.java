@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface ItemService {
-    List<ItemResponseDto> getItems(UUID publicId);
+    List<ItemResponseDto> getItems(UUID publicId,String keyword);
 
     ItemResponseDto findItem(UUID publicId, Long itemId);
 
@@ -25,4 +25,6 @@ public interface ItemService {
     void updateQuantity(UUID publicId, Long itemId, UpdateItemQuantityRequestDto request);
 
     Map<ItemCategory,Integer> getCategorySummary(UUID publicId);
+
+
 }

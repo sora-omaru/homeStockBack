@@ -38,4 +38,7 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
     Optional<ItemEntity> findByIdAndUser_publicId(Long itemId, UUID publicId);
 
     List<ItemEntity> findByNormalizedNameIsNull();
+
+    List<ItemEntity>findByUser_PublicIdAndNormalizedNameContaining(UUID publicId,String normalizedName);
+
 }
