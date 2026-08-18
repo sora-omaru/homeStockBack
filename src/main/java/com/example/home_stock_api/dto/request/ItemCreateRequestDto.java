@@ -42,4 +42,19 @@ public record ItemCreateRequestDto(
         LocalDate expirationDate
 
 ) {
+    @AssertTrue(message = "在庫管理方法に対応する在庫値を入力してください")
+    public boolean isStockValueValid() {
+        if (stockType == null) {
+            return true;
+        }
+
+        return switch (stockType) {
+            case QUANTITY -> quantity != null
+                    && stockPercentage == null
+                    && minPercentage == null;
+            case PERCENTAGE -> stockPercentage != null
+                    && quantity == null
+                    && minQuantity == null;
+        };
+    }
 }
