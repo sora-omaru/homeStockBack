@@ -76,16 +76,15 @@ public class ItemServiceImpl implements ItemService {
         item.setNormalizedName(itemNameNormalizer.normalize(request.name()));
         item.setStockType(request.stockType());
 
-        //Quantityを選択している場合は個数で表現
+//        stockTypeをみて個数か割合かを判断する
         if (request.stockType() == StockType.QUANTITY) {
             item.setQuantity(request.quantity());
             item.setMinQuantity(request.minQuantity());
 
             item.setStockPercentage(null);
             item.setMinPercentage(null);
-        }
-        //Percentageを選択している場合は割合で表現
-        if (request.stockType() == StockType.PERCENTAGE) {
+
+        } else if (request.stockType() == StockType.PERCENTAGE) {
             item.setQuantity(null);
             item.setMinQuantity(null);
 
@@ -122,7 +121,7 @@ public class ItemServiceImpl implements ItemService {
                 throw new BusinessException(ErrorCode.ITEM_ALREADY_EXISTS);
             }
         }
-//locationIdがNullの場合はそのままにする
+        //locationIdがNullの場合はNullで更新する
         Long locationId = request.locationId();
         LocationEntity location = null;
         if (locationId != null) {
@@ -131,8 +130,21 @@ public class ItemServiceImpl implements ItemService {
 
         item.setName(request.name());
         item.setNormalizedName(itemNameNormalizer.normalize(request.name()));
-        item.setQuantity(request.quantity());
-        item.setMinQuantity(request.minQuantity());
+        item.setStockType(request.stockType());
+
+        //stockTypeをみて個数か割合かを判断する
+        if (request.stockType() == StockType.QUANTITY) {
+            item.setQuantity(request.quantity());
+            item.setMinQuantity(request.minQuantity());
+            item.setStockPercentage(null);
+            item.setMinPercentage(null);
+        } else {
+            item.setQuantity(null);
+            item.setMinQuantity(null);
+            item.setStockPercentage(request.stockPercentage());
+            item.setMinPercentage(request.minPercentage());
+        }
+
         item.setCategory(request.category());
         item.setLocation(location);
         item.setMemo(request.memo());
@@ -148,9 +160,13 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public void updateQuantity(UUID publicId, Long itemId, UpdateItemQuantityRequestDto request) {
         ItemEntity item = itemRepository.findByIdAndUser_publicId(itemId, publicId).orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
-
+//StockTypeが個数を指定していないときは使用できないようにする。
+        if (item.getStockType() != StockType.QUANTITY) {
+            throw new BusinessException(ErrorCode.INVALID_STOCK_TYPE);
+        }
         item.setQuantity(request.quantity());
     }
+
 
 
     @Override
