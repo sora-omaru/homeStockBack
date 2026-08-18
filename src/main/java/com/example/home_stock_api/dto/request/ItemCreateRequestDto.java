@@ -1,10 +1,8 @@
 package com.example.home_stock_api.dto.request;
 
 import com.example.home_stock_api.entity.ItemCategory;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import com.example.home_stock_api.entity.enums.StockType;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
@@ -14,13 +12,24 @@ public record ItemCreateRequestDto(
         @Size(max = 100, message = "100文字以内で入力してください")
         String name,
 
-        @NotNull(message = "数量は必須です")
+
         @PositiveOrZero(message = "数量は0以上で入力してください")
         Integer quantity,
 
-        @NotNull(message = "最低在庫数は必須です")
+
         @PositiveOrZero(message = "最低在庫数は0以上で入力してください")
         Integer minQuantity,
+
+        @NotNull(message = "在庫管理方法は必須です")
+        StockType stockType,
+
+        @PositiveOrZero(message = "割合は0以上で入力してください")
+        @Max(value = 100, message = "割合は100以下で入力してください")
+        Integer stockPercentage,
+
+        @PositiveOrZero(message = "最低在庫割合は0以上で入力してください")
+        @Max(value = 100, message = "最低在庫割合は100以下で入力してください")
+        Integer minPercentage,
 
         Long locationId,
 
