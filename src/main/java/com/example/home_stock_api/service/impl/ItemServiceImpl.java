@@ -10,6 +10,7 @@ import com.example.home_stock_api.entity.ItemCategory;
 import com.example.home_stock_api.entity.ItemEntity;
 import com.example.home_stock_api.entity.LocationEntity;
 import com.example.home_stock_api.entity.UserEntity;
+import com.example.home_stock_api.entity.enums.StockType;
 import com.example.home_stock_api.repository.ItemRepository;
 import com.example.home_stock_api.repository.LocationRepository;
 import com.example.home_stock_api.repository.UserRepository;
@@ -73,8 +74,24 @@ public class ItemServiceImpl implements ItemService {
         item.setLocation(location);
         item.setName(request.name());
         item.setNormalizedName(itemNameNormalizer.normalize(request.name()));
-        item.setQuantity(request.quantity());
-        item.setMinQuantity(request.minQuantity());
+        item.setStockType(request.stockType());
+
+        //Quantityを選択している場合は個数で表現
+        if (request.stockType() == StockType.QUANTITY) {
+            item.setQuantity(request.quantity());
+            item.setMinQuantity(request.minQuantity());
+
+            item.setStockPercentage(null);
+            item.setMinPercentage(null);
+        }
+        //Percentageを選択している場合は割合で表現
+        if (request.stockType() == StockType.PERCENTAGE) {
+            item.setQuantity(null);
+            item.setMinQuantity(null);
+
+            item.setStockPercentage(request.stockPercentage());
+            item.setMinPercentage(request.minPercentage());
+        }
         item.setCategory(request.category());
         item.setMemo(request.memo());
         item.setExpirationDate(request.expirationDate());
@@ -129,11 +146,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void updateQuantity(
-            UUID publicId,
-            Long itemId,
-            UpdateItemQuantityRequestDto request
-    ) {
+    public void updateQuantity(UUID publicId, Long itemId, UpdateItemQuantityRequestDto request) {
         ItemEntity item = itemRepository.findByIdAndUser_publicId(itemId, publicId).orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
 
         item.setQuantity(request.quantity());
@@ -145,11 +158,7 @@ public class ItemServiceImpl implements ItemService {
         UserEntity user = findUser(publicId);
         List<ItemEntity> items = itemRepository.findByUserWithLocation(user);
 
-        return items.stream()
-                .collect(Collectors.groupingBy(
-                        ItemEntity::getCategory,
-                        Collectors.summingInt(item -> 1)
-                ));
+        return items.stream().collect(Collectors.groupingBy(ItemEntity::getCategory, Collectors.summingInt(item -> 1)));
 
 //        Map<ItemCategory, Integer> map = new HashMap<>();
 
@@ -174,7 +183,20 @@ public class ItemServiceImpl implements ItemService {
     private ItemResponseDto toResponse(ItemEntity item) {
         LocationEntity location = item.getLocation();
 
-        return new ItemResponseDto(item.getId(), item.getName(), item.getQuantity(), item.getMinQuantity(), item.getCategory(), location != null ? location.getId() : null, location != null ? location.getName() : null, item.getExpirationDate(), item.getMemo());
+        return new ItemResponseDto(
+                item.getId(),
+                item.getName(),
+                item.getQuantity(),
+                item.getMinQuantity(),
+                item.getStockType(),
+                item.getStockPercentage(),
+                item.getMinPercentage(),
+                item.getCategory(),
+                location != null ? location.getId() : null,
+                location != null ? location.getName() : null,
+                item.getExpirationDate(),
+                item.getMemo()
+        );
     }
 
     private LocationEntity findLocation(UserEntity user, Long locationId) {
