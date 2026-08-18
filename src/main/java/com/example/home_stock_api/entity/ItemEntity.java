@@ -44,7 +44,6 @@ public class ItemEntity {
 
     @Min(0)
     @Column(name = "min_quantity")
-    @NotNull
     private Integer minQuantity;
 
     @Min(0)
