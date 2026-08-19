@@ -1,6 +1,7 @@
 package com.example.home_stock_api.controller;
 
 import com.example.home_stock_api.dto.request.ItemCreateRequestDto;
+import com.example.home_stock_api.dto.request.UpdateItemPercentageDto;
 import com.example.home_stock_api.dto.request.UpdateItemQuantityRequestDto;
 import com.example.home_stock_api.dto.request.UpdateItemRequestDto;
 import com.example.home_stock_api.dto.response.ItemResponseDto;
@@ -58,6 +59,20 @@ public class ItemController {
             @Valid @RequestBody UpdateItemQuantityRequestDto request
     ) {
         itemService.updateQuantity(
+                currentUserProvider.getPublicId(authentication),
+                itemId,
+                request
+        );
+    }
+
+    @PatchMapping("{id}/percentage")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updatePercentage(
+            Authentication authentication,
+            @PathVariable("id") Long itemId,
+            @Valid @RequestBody UpdateItemPercentageDto request
+    ) {
+        itemService.updatePercentage(
                 currentUserProvider.getPublicId(authentication),
                 itemId,
                 request

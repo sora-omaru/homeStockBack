@@ -3,6 +3,7 @@ package com.example.home_stock_api.service.impl;
 import com.example.home_stock_api.common.error.BusinessException;
 import com.example.home_stock_api.common.error.ErrorCode;
 import com.example.home_stock_api.dto.request.ItemCreateRequestDto;
+import com.example.home_stock_api.dto.request.UpdateItemPercentageDto;
 import com.example.home_stock_api.dto.request.UpdateItemQuantityRequestDto;
 import com.example.home_stock_api.dto.request.UpdateItemRequestDto;
 import com.example.home_stock_api.dto.response.ItemResponseDto;
@@ -167,7 +168,16 @@ public class ItemServiceImpl implements ItemService {
         item.setQuantity(request.quantity());
     }
 
+    @Override
+    @Transactional
+    public void updatePercentage(UUID publicId, Long itemId, UpdateItemPercentageDto request) {
+        ItemEntity item = itemRepository.findByIdAndUser_publicId(itemId, publicId).orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
 
+        if (item.getStockType() != StockType.PERCENTAGE) {
+            throw new BusinessException(ErrorCode.INVALID_STOCK_TYPE);
+        }
+        item.setStockPercentage(request.stockPercentage());
+    }
 
     @Override
     public Map<ItemCategory, Integer> getCategorySummary(UUID publicId) {

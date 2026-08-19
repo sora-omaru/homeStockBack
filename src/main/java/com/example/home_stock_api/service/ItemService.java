@@ -1,6 +1,7 @@
 package com.example.home_stock_api.service;
 
 import com.example.home_stock_api.dto.request.ItemCreateRequestDto;
+import com.example.home_stock_api.dto.request.UpdateItemPercentageDto;
 import com.example.home_stock_api.dto.request.UpdateItemQuantityRequestDto;
 import com.example.home_stock_api.dto.request.UpdateItemRequestDto;
 import com.example.home_stock_api.dto.response.ItemResponseDto;
@@ -12,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface ItemService {
-    List<ItemResponseDto> getItems(UUID publicId,String keyword);
+    List<ItemResponseDto> getItems(UUID publicId, String keyword);
 
     ItemResponseDto findItem(UUID publicId, Long itemId);
 
@@ -24,7 +25,8 @@ public interface ItemService {
 
     void updateQuantity(UUID publicId, Long itemId, UpdateItemQuantityRequestDto request);
 
-    Map<ItemCategory,Integer> getCategorySummary(UUID publicId);
+    Map<ItemCategory, Integer> getCategorySummary(UUID publicId);
 
+    void updatePercentage(UUID publicId, Long itemId, UpdateItemPercentageDto request);
 
 }

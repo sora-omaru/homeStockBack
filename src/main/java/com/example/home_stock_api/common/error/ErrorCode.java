@@ -44,7 +44,7 @@ public enum ErrorCode {
     ),
     INVALID_STOCK_TYPE(
             HttpStatus.BAD_REQUEST,
-            "個数の時に選択してください"
+            "在庫管理方法に対応していない更新です"
     );
 
     private final HttpStatus status;
