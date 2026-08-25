@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 public record UpdateItemPercentageDto(
         @NotNull
         @Min(0)
-        @Max(100)
+        @Max(200)
         Integer stockPercentage
 ) {
 }

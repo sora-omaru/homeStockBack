@@ -47,12 +47,12 @@ public class ItemEntity {
     private Integer minQuantity;
 
     @Min(0)
-    @Max(100)
+    @Max(200)
     @Column(name = "stock_percentage")
     private Integer stockPercentage;
 
     @Min(0)
-    @Max(100)
+    @Max(200)
     @Column(name = "min_percentage")
     private Integer minPercentage;
 

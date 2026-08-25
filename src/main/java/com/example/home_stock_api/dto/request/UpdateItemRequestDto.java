@@ -21,11 +21,11 @@ public record UpdateItemRequestDto(
         StockType stockType,
 
         @PositiveOrZero(message = "割合は0以上で入力してください")
-        @Max(value = 100, message = "割合は100以下で入力してください")
+        @Max(value = 200, message = "割合は200以下で入力してください")
         Integer stockPercentage,
 
         @PositiveOrZero(message = "最低在庫割合は0以上で入力してください")
-        @Max(value = 100, message = "最低在庫割合は100以下で入力してください")
+        @Max(value = 200, message = "最低在庫割合は200以下で入力してください")
         Integer minPercentage,
 
         Long locationId,
