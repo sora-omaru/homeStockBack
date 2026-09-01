@@ -42,6 +42,10 @@ public enum ErrorCode {
             HttpStatus.NOT_FOUND,
             "この物は見つかりませんでした"
     ),
+    SHOPPING_MEMO_NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "買い物メモが見つかりませんでした"
+    ),
     INVALID_STOCK_TYPE(
             HttpStatus.BAD_REQUEST,
             "在庫管理方法に対応していない更新です"

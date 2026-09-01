@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,6 +21,16 @@ import java.util.UUID;
 public class ShoppingMemoServiceImpl implements ShoppingMemoService {
     private final UserRepository userRepository;
     private final ShoppingMemoRepository shoppingMemoRepository;
+
+    @Override
+    @Transactional
+    public List<ShoppingMemoResponseDto> getShoppingMemos(UUID publicId) {
+        UserEntity user = findUser(publicId);
+
+        return shoppingMemoRepository.findByUserOrderByCreatedAtDesc(user).stream()
+                .map(this::toResponse)
+                .toList();
+    }
 
     @Override
     @Transactional
@@ -33,6 +44,17 @@ public class ShoppingMemoServiceImpl implements ShoppingMemoService {
         ShoppingMemoEntity savedMemo = shoppingMemoRepository.save(shoppingMemo);
 
         return toResponse(savedMemo);
+    }
+
+    @Override
+    @Transactional
+    public void deleteShoppingMemo(UUID publicId, Long shoppingMemoId) {
+        UserEntity user = findUser(publicId);
+        ShoppingMemoEntity shoppingMemo = shoppingMemoRepository
+                .findByIdAndUser(shoppingMemoId, user)
+                .orElseThrow(() -> new BusinessException(ErrorCode.SHOPPING_MEMO_NOT_FOUND));
+
+        shoppingMemoRepository.delete(shoppingMemo);
     }
 
     private UserEntity findUser(UUID publicId) {

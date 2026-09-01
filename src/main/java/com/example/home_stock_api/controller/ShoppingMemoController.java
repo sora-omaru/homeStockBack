@@ -8,11 +8,16 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class ShoppingMemoController {
     private final ShoppingMemoService shoppingMemoService;
     private final CurrentUserProvider currentUserProvider;
+
+    @GetMapping
+    public List<ShoppingMemoResponseDto> getShoppingMemos(Authentication authentication) {
+        return shoppingMemoService.getShoppingMemos(
+                currentUserProvider.getPublicId(authentication)
+        );
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -30,6 +42,18 @@ public class ShoppingMemoController {
         return shoppingMemoService.createShoppingMemo(
                 currentUserProvider.getPublicId(authentication),
                 request
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteShoppingMemo(
+            Authentication authentication,
+            @PathVariable("id") Long shoppingMemoId
+    ) {
+        shoppingMemoService.deleteShoppingMemo(
+                currentUserProvider.getPublicId(authentication),
+                shoppingMemoId
         );
     }
 }
