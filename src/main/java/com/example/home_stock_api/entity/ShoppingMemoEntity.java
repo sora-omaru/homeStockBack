@@ -21,7 +21,7 @@ public class ShoppingMemoEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 100)
     private String name;
 
     @Column(name = "created_at", nullable = false)
